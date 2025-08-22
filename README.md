@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # RestaurantInventory
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.1.6.
@@ -57,3 +58,7 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+=======
+# smart-restaurant-inventory
+A full-stack restaurant inventory management system built with Spring Boot (backend) and Angular (frontend). Features include ingredient tracking, dish management, and waste monitoring.
+>>>>>>> 9a315b6a21f12b7132e6fa7ff7a961077ecd6ec4
