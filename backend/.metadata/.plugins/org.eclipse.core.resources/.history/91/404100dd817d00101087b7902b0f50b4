@@ -1,0 +1,11 @@
+package com.siwms.dao;
+
+import java.util.List;
+
+import com.siwms.models.Ingredient;
+
+public interface IngredientDAO {
+
+	List<Ingredient> getAllIngredients();
+ 
+}

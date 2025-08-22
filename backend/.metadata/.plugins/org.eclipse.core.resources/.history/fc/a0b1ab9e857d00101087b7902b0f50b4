@@ -1,0 +1,53 @@
+package com.siwms.dao;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.siwms.models.Ingredient;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
+
+@Repository
+public class IngredientDAOImpl implements IngredientDAO {
+
+	@Autowired
+	private EntityManager entityManager;
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Ingredient> getAllIngredients() {
+		String sql = "SELECT * FROM Ingredient";
+		Query query = entityManager.createNamedQuery(sql,Ingredient.class);
+		return query.getResultList();
+	}
+
+	@Override
+	public Ingredient getIngredientById(Long id) {
+		String sql = "SELECT * FROM Ingredient WHERE ingredientId = : id";
+		Query query = entityManager.createNamedQuery(sql, Ingredient.class);
+		query.setParameter("id", id);
+		return (Ingredient) query.getSingleResult();
+	}
+
+	@Override
+	public void saveIngredient(Ingredient ingredient) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void updateIngredient(Long id, Ingredient ingredient) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void deleteIngredient(Long id) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

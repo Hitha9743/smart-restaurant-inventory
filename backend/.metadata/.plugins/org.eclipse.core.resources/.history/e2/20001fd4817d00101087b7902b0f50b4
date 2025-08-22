@@ -1,0 +1,11 @@
+package com.siwms.dao;
+
+public class IngredientDAOImpl implements IngredientDAO{
+
+	@Override
+	public void abc() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

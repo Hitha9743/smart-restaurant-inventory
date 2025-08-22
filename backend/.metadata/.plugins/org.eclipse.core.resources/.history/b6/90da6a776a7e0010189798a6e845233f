@@ -1,0 +1,5 @@
+package com.siwms.controllers;
+
+public class WasteController {
+
+}

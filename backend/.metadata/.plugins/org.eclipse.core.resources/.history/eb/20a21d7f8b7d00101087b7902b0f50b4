@@ -1,0 +1,11 @@
+package com.siwms.controllers;
+
+
+@RestController
+@RequestMapping("/api/ingredients")
+@CrossOrigin(origins = "http://localhost:5500") 
+public class IngredientController {
+	
+	
+
+}

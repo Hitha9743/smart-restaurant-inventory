@@ -1,0 +1,22 @@
+package com.siwms.models;
+
+import jakarta.persistence.*;
+import java.time.LocalDate;
+
+@Entity
+@Table(name = "ingredients")
+public class IngredientEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long ingredientId;
+
+    private String name;
+    private String category;
+    private double quantity;
+    private String unit;
+    private LocalDate purchaseDate;
+    private LocalDate expiryDate;
+    private double cost;
+
+}

@@ -1,0 +1,5 @@
+package com.siwms.dao;
+
+public class IngredientDAOImpl implements IngredientDAO{
+
+}

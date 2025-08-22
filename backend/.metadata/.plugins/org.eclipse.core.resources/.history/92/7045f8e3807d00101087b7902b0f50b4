@@ -1,0 +1,11 @@
+import com.siwms.dao.example;
+
+public class Exampledaoimpl implements example {
+
+	@Override
+	public void xyz() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

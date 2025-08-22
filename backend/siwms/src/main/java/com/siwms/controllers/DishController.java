@@ -1,0 +1,62 @@
+package com.siwms.controllers;
+
+import com.siwms.models.Dish;
+import com.siwms.models.DishIngredient;
+import com.siwms.services.DishService;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@CrossOrigin(origins = "http://localhost:4200") // remove if using Angular proxy
+@RestController
+@RequestMapping("/api/dishes")
+public class DishController {
+
+	private final DishService dishService;
+
+	public DishController(DishService dishService) {
+		this.dishService = dishService;
+	}
+
+	@GetMapping
+	public List<Dish> getAll() {
+		return dishService.getAll();
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<Dish> getById(@PathVariable Long id) {
+		Dish d = dishService.getById(id);
+		return d != null ? ResponseEntity.ok(d) : ResponseEntity.notFound().build();
+	}
+
+	@GetMapping("/{id}/ingredients")
+	public List<DishIngredient> getDishIngredients(@PathVariable Long id) {
+		return dishService.getIngredientsForDish(id);
+	}
+
+	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
+	public ResponseEntity<String> create(@RequestBody DishWithNames payload) {
+		dishService.add(payload.dish, payload.ingredientNames);
+		return ResponseEntity.ok("Dish added successfully!");
+	}
+
+	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
+	public ResponseEntity<String> update(@PathVariable Long id, @RequestBody DishWithNames payload) {
+		dishService.update(id, payload.dish, payload.ingredientNames);
+		return ResponseEntity.ok("Dish updated successfully!");
+	}
+
+	@DeleteMapping(value = "/{id}", produces = MediaType.TEXT_PLAIN_VALUE)
+	public ResponseEntity<String> delete(@PathVariable Long id) {
+		dishService.delete(id);
+		return ResponseEntity.ok("Dish deleted successfully!");
+	}
+
+	// Simple DTO to accept dish + ingredient names array
+	public static class DishWithNames {
+		public Dish dish;
+		public List<String> ingredientNames;
+	}
+}

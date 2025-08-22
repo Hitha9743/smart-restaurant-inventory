@@ -1,0 +1,6 @@
+package com.siwms.dao;
+
+public interface IngredientDAO {
+ public void abc();
+ 
+}

@@ -1,0 +1,40 @@
+package com.siwms.services;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.siwms.dao.IngredientDAO;
+import com.siwms.models.Ingredient;
+
+public class IngredientServiceImpl implements IngredientService {
+
+	@Autowired
+	private IngredientDAO ingredientDAO;
+
+	@Override
+	public List<Ingredient> getAllIngredients() {
+		return ingredientDAO.getAllIngredients();
+	}
+
+	@Override
+	public Ingredient getIngredientById(Long id) {
+		return ingredientDAO.getIngredientById(id);
+	}
+
+	@Override
+	public void addIngredient(Ingredient ingredient) {
+		ingredientDAO.saveIngredient(ingredient);
+	}
+
+	@Override
+	public void updateIngredient(Long id, Ingredient ingredient) {
+		ingredientDAO.updateIngredient(id, ingredient);
+	}
+
+	@Override
+	public void deleteIngredient(Long id) {
+		ingredientDAO.deleteIngredient(id);
+	}
+
+}

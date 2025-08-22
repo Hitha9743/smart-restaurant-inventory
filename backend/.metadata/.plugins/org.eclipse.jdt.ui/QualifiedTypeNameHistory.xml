@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="com.siwms.dao.IngredientDAO"/>
+    <fullyQualifiedTypeName name="com.siwms.dao.example"/>
+    <fullyQualifiedTypeName name="com.siwms.models.Ingredient"/>
+    <fullyQualifiedTypeName name="com.siwms.services.IngredientService"/>
+    <fullyQualifiedTypeName name="org.springframework.ui.Model"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.GetMapping"/>
+</qualifiedTypeNameHistroy>
