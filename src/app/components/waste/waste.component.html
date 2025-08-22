@@ -1,0 +1,111 @@
+<div class="page">
+  <header class="topbar">
+    <h1>Smart Inventory</h1>
+  <nav>
+  <a routerLink="/ingredients" routerLinkActive="active">Ingredients</a>
+  <a routerLink="/dishes" routerLinkActive="active">Dishes</a>
+  <a routerLink="/waste" routerLinkActive="active">Waste</a>
+</nav>
+
+
+  </header>
+
+  <!-- Filter / total -->
+  <section class="card">
+    <div class="card-head"><h2>Waste Summary</h2></div>
+    <form [formGroup]="filter" (ngSubmit)="applyRange()" class="form">
+      <div class="form-grid">
+        <div class="field"><label>From</label><input type="date" formControlName="from" /></div>
+        <div class="field"><label>To</label><input type="date" formControlName="to" /></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn" type="submit">Apply</button>
+        <div style="margin-left:auto;font-weight:700">Total Cost: ₹ {{ total | number:'1.2-2' }}</div>
+      </div>
+    </form>
+  </section>
+
+  <!-- Form -->
+  <section class="card form-card">
+    <div class="card-head"><h2>{{ form.value.id ? 'Edit Waste' : 'Add Waste' }}</h2></div>
+    <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+      <div class="form-grid">
+        <div class="field" [class.invalid]="f['ingredientId'].touched && f['ingredientId'].invalid">
+          <label>Ingredient ID <span>*</span></label>
+          <input type="number" formControlName="ingredientId" />
+          <small *ngIf="f['ingredientId'].touched && f['ingredientId'].hasError('required')">Required</small>
+        </div>
+        <div class="field" [class.invalid]="f['quantity'].touched && f['quantity'].invalid">
+          <label>Quantity <span>*</span></label>
+          <input type="number" min="0" step="0.01" formControlName="quantity" />
+          <small *ngIf="f['quantity'].touched && f['quantity'].hasError('required')">Required</small>
+        </div>
+        <div class="field" [class.invalid]="f['unit'].touched && f['unit'].invalid">
+          <label>Unit <span>*</span></label>
+          <input formControlName="unit" placeholder="kg, L, pcs..." />
+          <small *ngIf="f['unit'].touched && f['unit'].hasError('required')">Required</small>
+        </div>
+        <div class="field"><label>Reason</label><input formControlName="reason" placeholder="Spoiled / Prep error..." /></div>
+        <div class="field" [class.invalid]="f['wastedOn'].touched && f['wastedOn'].invalid">
+          <label>Wasted On <span>*</span></label>
+          <input type="date" formControlName="wastedOn" />
+          <small *ngIf="f['wastedOn'].touched && f['wastedOn'].hasError('required')">Required</small>
+        </div>
+        <div class="field" [class.invalid]="f['cost'].touched && f['cost'].invalid">
+          <label>Cost (₹) <span>*</span></label>
+          <input type="number" min="0" step="0.01" formControlName="cost" />
+          <small *ngIf="f['cost'].touched && f['cost'].hasError('required')">Required</small>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn primary" type="submit" [disabled]="form.invalid">{{ form.value.id ? 'Update' : 'Save' }}</button>
+        <button class="btn" type="button" (click)="cancel()">Cancel</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- List -->
+  <section class="card">
+    <div class="card-head">
+      <h2>Waste Records</h2>
+      <button class="btn" (click)="fetch()">↻ Refresh</button>
+    </div>
+
+    <div *ngIf="loading" class="status">Loading…</div>
+
+    <table *ngIf="!loading && items.length" class="table">
+      <thead><tr>
+        <th>ID</th><th>Ingredient</th><th>Qty</th><th>Unit</th><th>Reason</th><th>Date</th><th>Cost</th><th>Actions</th>
+      </tr></thead>
+      <tbody>
+        <tr *ngFor="let it of items">
+          <td>{{ it.id }}</td>
+          <td>{{ it.ingredientId }}</td>
+          <td>{{ it.quantity }}</td>
+          <td>{{ it.unit }}</td>
+          <td>{{ it.reason }}</td>
+          <td>{{ it.wastedOn }}</td>
+          <td>₹ {{ it.cost }}</td>
+          <td class="actions">
+            <button class="btn" (click)="edit(it)">Edit</button>
+            <button class="btn" (click)="askRemove(it.id!)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p *ngIf="!loading && !items.length" class="muted">No waste records yet.</p>
+  </section>
+
+  <!-- Confirm Delete Modal -->
+  <div class="modal-backdrop" *ngIf="confirmId !== null">
+    <div class="modal">
+      <h3>Delete Waste Record?</h3>
+      <p>Are you sure you want to delete #{{ confirmId }}?</p>
+      <div class="modal-actions">
+        <button class="btn" (click)="cancelRemove()">Cancel</button>
+        <button class="btn danger" (click)="confirmRemove()">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>

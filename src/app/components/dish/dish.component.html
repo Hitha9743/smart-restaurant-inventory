@@ -1,0 +1,91 @@
+<div class="page">
+  <header class="topbar">
+    <h1>Smart Inventory</h1>
+   <nav>
+  <a routerLink="/ingredients" routerLinkActive="active">Ingredients</a>
+  <a routerLink="/dishes" routerLinkActive="active">Dishes</a>
+  <a routerLink="/waste" routerLinkActive="active">Waste</a>
+</nav>
+
+
+  </header>
+
+  <section class="card form-card">
+    <div class="card-head"><h2>{{ form.value.id ? 'Edit Dish' : 'Add Dish' }}</h2></div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+      <div class="form-grid">
+        <div class="field" [class.invalid]="f['name'].touched && f['name'].invalid">
+          <label>Name <span>*</span></label>
+          <input formControlName="name" placeholder="e.g. Margherita Pizza" />
+          <small *ngIf="f['name'].touched && f['name'].hasError('required')">Name is required</small>
+        </div>
+
+        <div class="field" [class.invalid]="f['price'].touched && f['price'].invalid">
+          <label>Price (₹) <span>*</span></label>
+          <input type="number" formControlName="price" min="0" step="0.01" />
+          <small *ngIf="f['price'].touched && f['price'].hasError('required')">Price is required</small>
+          <small *ngIf="f['price'].touched && f['price'].hasError('min')">Must be 0 or more</small>
+        </div>
+      </div>
+
+      <div class="chips" formArrayName="ingredients">
+  <label>Ingredients</label>
+  <div class="chip-row">
+    <ng-container *ngFor="let _ of ingArr.controls; let i = index">
+      <span class="chip">
+        <input [formControlName]="i" placeholder="e.g. Cheese" />
+        <button type="button" class="x" (click)="removeIngredientChip(i)">✕</button>
+      </span>
+    </ng-container>
+    <button type="button" class="btn" (click)="addIngredientChip()">+ Add</button>
+  </div>
+</div>
+
+
+      <div class="form-actions">
+        <button class="btn primary" type="submit" [disabled]="form.invalid">{{ form.value.id ? 'Update' : 'Save' }}</button>
+        <button class="btn" type="button" (click)="cancel()">Cancel</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <h2>Dishes</h2>
+      <button class="btn" (click)="fetch()">↻ Refresh</button>
+    </div>
+
+    <div *ngIf="loading" class="status">Loading…</div>
+
+    <table *ngIf="!loading && items.length" class="table">
+      <thead><tr><th>ID</th><th>Name</th><th>Price</th><th>Ingredients</th><th>Actions</th></tr></thead>
+      <tbody>
+        <tr *ngFor="let it of items">
+          <td>{{ it.id }}</td>
+          <td class="name">{{ it.name }}</td>
+          <td>₹ {{ it.price }}</td>
+          <td>{{ (it.ingredients || []).join(', ') }}</td>
+          <td class="actions">
+            <button class="btn" (click)="edit(it)">Edit</button>
+            <button class="btn" (click)="askRemove(it.id!)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p *ngIf="!loading && !items.length" class="muted">No dishes yet.</p>
+  </section>
+
+  <!-- Confirm Delete Modal -->
+  <div class="modal-backdrop" *ngIf="confirmId !== null">
+    <div class="modal">
+      <h3>Delete Dish?</h3>
+      <p>Are you sure you want to delete #{{ confirmId }}? This cannot be undone.</p>
+      <div class="modal-actions">
+        <button class="btn" (click)="cancelRemove()">Cancel</button>
+        <button class="btn danger" (click)="confirmRemove()">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>

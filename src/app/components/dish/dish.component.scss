@@ -1,0 +1,11 @@
+/* reuse your existing page/card/form styles */
+.chips { margin-top: 8px; }
+.chip-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 8px; border: 1px solid #e5e7eb; border-radius: 999px; background: #fff; }
+.chip input { border: none; outline: none; min-width: 110px; }
+.chip .x { background: transparent; border: none; cursor: pointer; }
+.modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.35); display: grid; place-items: center; z-index: 999; }
+.modal { width: min(520px, 92vw); background: #fff; border-radius: 12px; padding: 16px; box-shadow: 0 20px 60px rgba(0,0,0,.3); }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+.btn.danger { background: #b91c1c; color: #fff; border-color: transparent; }
+.btn.danger:hover { background: #991b1b; }

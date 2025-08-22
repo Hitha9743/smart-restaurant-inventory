@@ -1,0 +1,6 @@
+/* reuse your existing page/card/form styles; add modal if not global */
+.modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.35); display: grid; place-items: center; z-index: 999; }
+.modal { width: min(520px, 92vw); background: #fff; border-radius: 12px; padding: 16px; box-shadow: 0 20px 60px rgba(0,0,0,.3); }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+.btn.danger { background: #b91c1c; color: #fff; border-color: transparent; }
+.btn.danger:hover { background: #991b1b; }

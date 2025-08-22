@@ -1,0 +1,165 @@
+<div class="page">
+  <!-- Top bar -->
+  <header class="topbar">
+    <h1>Smart Inventory</h1>
+    <nav>
+  <a routerLink="/ingredients" routerLinkActive="active">Ingredients</a>
+  <a routerLink="/dishes" routerLinkActive="active">Dishes</a>
+  <a routerLink="/waste" routerLinkActive="active">Waste</a>
+</nav>
+
+
+  </header>
+
+  <!-- ADD / EDIT FORM -->
+  <section class="card form-card">
+    <div class="card-head">
+      <h2>{{ form.value.ingredientId ? 'Edit Ingredient' : 'Add Ingredient' }}</h2>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+      <div class="form-grid">
+        <!-- Name -->
+        <div class="field" [class.invalid]="f['name'].touched && f['name'].invalid">
+          <label for="name">Name <span>*</span></label>
+          <input id="name" formControlName="name" placeholder="e.g. Tomato" />
+          <small *ngIf="f['name'].touched && f['name'].hasError('required')">
+            Name is required
+          </small>
+        </div>
+
+        <!-- Category -->
+        <div class="field">
+          <label for="category">Category</label>
+          <input id="category" formControlName="category" placeholder="e.g. Vegetable" />
+        </div>
+
+        <!-- Quantity -->
+        <div class="field" [class.invalid]="f['quantity'].touched && f['quantity'].invalid">
+          <label for="quantity">Quantity <span>*</span></label>
+          <input
+            id="quantity"
+            type="number"
+            formControlName="quantity"
+            min="0"
+            step="0.01"
+            placeholder="0"
+          />
+          <small *ngIf="f['quantity'].touched && f['quantity'].hasError('required')">
+            Quantity is required
+          </small>
+          <small *ngIf="f['quantity'].touched && f['quantity'].hasError('min')">
+            Must be 0 or more
+          </small>
+        </div>
+
+        <!-- Unit -->
+        <div class="field" [class.invalid]="f['unit'].touched && f['unit'].invalid">
+          <label for="unit">Unit <span>*</span></label>
+          <input id="unit" formControlName="unit" placeholder="kg, L, pcs..." />
+          <small *ngIf="f['unit'].touched && f['unit'].hasError('required')">
+            Unit is required
+          </small>
+        </div>
+
+        <!-- Purchase Date -->
+        <div class="field" [class.invalid]="f['purchaseDate'].touched && f['purchaseDate'].invalid">
+          <label for="purchaseDate">Purchase Date <span>*</span></label>
+          <input id="purchaseDate" type="date" formControlName="purchaseDate" />
+          <small *ngIf="f['purchaseDate'].touched && f['purchaseDate'].hasError('required')">
+            Required
+          </small>
+        </div>
+
+        <!-- Expiry Date -->
+        <div class="field" [class.invalid]="f['expiryDate'].touched && f['expiryDate'].invalid">
+          <label for="expiryDate">Expiry Date <span>*</span></label>
+          <input id="expiryDate" type="date" formControlName="expiryDate" />
+          <small *ngIf="f['expiryDate'].touched && f['expiryDate'].hasError('required')">
+            Required
+          </small>
+        </div>
+
+        <!-- Cost -->
+        <div class="field" [class.invalid]="f['cost'].touched && f['cost'].invalid">
+          <label for="cost">Cost (₹) <span>*</span></label>
+          <input
+            id="cost"
+            type="number"
+            formControlName="cost"
+            min="0"
+            step="0.01"
+            placeholder="0.00"
+          />
+          <small *ngIf="f['cost'].touched && f['cost'].hasError('required')">
+            Cost is required
+          </small>
+          <small *ngIf="f['cost'].touched && f['cost'].hasError('min')">
+            Must be 0 or more
+          </small>
+        </div>
+      </div>
+
+      <!-- cross-field date error (if you added the validator) -->
+      <small *ngIf="form.touched && form.errors?.['dateOrder']">
+        Expiry date must be after purchase date
+      </small>
+
+      <div class="form-actions">
+        <button class="btn primary" type="submit" [disabled]="form.invalid">
+          {{ form.value.ingredientId ? 'Update' : 'Save' }}
+        </button>
+        <button class="btn" type="button" (click)="cancel()">Cancel</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- LIST / TABLE -->
+  <section class="card">
+    <div class="card-head">
+      <h2>Ingredients</h2>
+      <button class="btn" (click)="fetch()">↻ Refresh</button>
+    </div>
+
+    <div *ngIf="loading" class="status">Loading…</div>
+    <div *ngIf="error" class="status error">{{ error }}</div>
+
+    <table *ngIf="!loading && items.length" class="table">
+      <thead>
+        <tr>
+          <th>ID</th><th>Name</th><th>Category</th><th>Qty</th><th>Unit</th>
+          <th>Purchase</th><th>Expiry</th><th>Cost</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let it of items">
+          <td>{{ it.ingredientId }}</td>
+          <td class="name">{{ it.name }}</td>
+          <td>{{ it.category }}</td>
+          <td>{{ it.quantity }}</td>
+          <td>{{ it.unit }}</td>
+          <td>{{ it.purchaseDate }}</td>
+          <td>{{ it.expiryDate }}</td>
+          <td>₹ {{ it.cost }}</td>
+          <td class="actions">
+            <button class="btn" (click)="edit(it)">Edit</button>
+            <button class="btn" (click)="askRemove(it.ingredientId!)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- Confirm Delete Modal -->
+<!-- confirm modal somewhere near the bottom of ingredient.component.html -->
+<div class="modal-backdrop" *ngIf="confirmId !== null">
+  <div class="modal">
+    <h3>Delete Ingredient?</h3>
+    <p>Are you sure you want to delete #{{ confirmId }}? This cannot be undone.</p>
+    <div class="modal-actions">
+      <button class="btn" (click)="cancelRemove()">Cancel</button>
+      <button class="btn danger" (click)="confirmRemove()">Delete</button>
+    </div>
+  </div>
+</div>
+    <p *ngIf="!loading && !items.length" class="muted">No ingredients yet.</p>
+  </section>
+</div>
